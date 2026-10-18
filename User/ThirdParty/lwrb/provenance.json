@@ -1,0 +1,13 @@
+{
+  "upstream": "https://github.com/MaJerle/lwrb",
+  "tag": "v3.2.0",
+  "commit": "77b2bdbecf60cd80e449f5c61bde72ec195efac4",
+  "imported_scope": "core header/source, LICENSE, AUTHORS; extensions and examples omitted",
+  "modifications": [],
+  "sha256": {
+    "src/include/lwrb/lwrb.h": "5432be99f976830da4770e7e0d1e44c4fe7778ff1e80f70352e736c565cdec56",
+    "src/lwrb/lwrb.c": "9a18a5d455c4fbaac824ba47ecc07b819f7f25f94f119985b4d3d6fca46b3eb8",
+    "LICENSE": "507e3c5d280f523e9db17f91877b4b5b99f41ac8ec6fcc58644bffd7bcdf3f08",
+    "AUTHORS": "56f8a3488c98a35276e8eb54c5ceb3b9a2605e65a266222f120571cbfaeb14ce"
+  }
+}
