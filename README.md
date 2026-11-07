@@ -216,3 +216,37 @@ DMA 直接访问内部存储区、零拷贝、覆盖旧数据和平台锁不属�
 包含回绕、偏移查看、跳过、全量读写、统计饱和、容量拒绝、空参数、实例隔离，
 以及各 10,000 次变长操作与参考 FIFO 比对。32 位编译通过（未执行）。
 上游 SHA-256 校验通过。未执行 LDRA/MISRA、CMake 构建或目标硬件并发验证。
+
+## 组件接入追溯
+
+复制到宿主工程时，在宿主依赖清单记录本组件仓库地址、精确提交 SHA、本地修改和获取方式。第三方后端的 provenance.json 随源码保留。
+
+| 记录项 | 填写方式 |
+|---|---|
+| 组件来源 | 本仓库 URL |
+| 采用提交 | 获取源码时执行 `git rev-parse HEAD`，记录完整 SHA |
+| 本地修改 | 记录修改文件及原因，原样使用时记为无 |
+| 获取方式 | 固定提交检出或带完整依赖的源码包 |
+
+本仓库维护可复制的共享组件模板。宿主工程自行维护板级配置、产品行为及目标验证记录。
+
+## 自动验证
+
+GitHub Actions 对 Windows 全新检出分别使用 `core.autocrlf=true/false`，执行真实后端 O0/O2 测试和 32 位编译检查。Linux 作业通过 `add_subdirectory()` 构建并运行独立 CMake 消费者，验证头文件、宏传播和最终链接。结果以对应提交的 Actions 状态为准。
+
+CMake 消费者验证命令如下。
+
+```sh
+cmake -S tests/cmake -B build/consumer
+cmake --build build/consumer
+ctest --test-dir build/consumer --output-on-failure
+```
+
+Windows 缺少 SDK 时可使用随库测试工具链，构建后运行 `build/consumer/consumer.exe`。
+
+```sh
+cmake -S tests/cmake -B build/consumer -G Ninja -DCMAKE_TOOLCHAIN_FILE=windows-llvm.cmake -DLLVM_BIN="C:/path/to/LLVM/bin"
+cmake --build build/consumer
+```
+
+该工具链配合测试专用 runtime 和 stubs 验证链接，产品工程使用宿主工具链。

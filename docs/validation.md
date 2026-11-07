@@ -84,3 +84,9 @@ README 补充单任务持有 ring、DMA 数据块交接和 ISR 同步约束。
 上游源码与许可证SHA-256校验通过，产品函数Doxygen头覆盖15/15，Markdown本地链接有效。
 自有源码采用简短retval注释，自有MIT许可证及版权署名ALOLAN已补齐。
 未运行LDRA/MISRA、CMake构建或硬件并发验证。
+
+## 2026-11-07 审查整改验证
+
+增加 .gitattributes 保留第三方原始字节。CMake 3.25、Ninja、Clang 16 与 LLD 在 Windows 无 SDK 测试工具链下完成两个消费者的配置、构建、最终链接和执行，退出码为 0。Linux 标准工具链由 CI 验证，结果以对应提交状态为准。
+
+环形缓冲 O0/O2 各 9 组行为测试通过。32 位编译检查通过。硬件集成由宿主验证。

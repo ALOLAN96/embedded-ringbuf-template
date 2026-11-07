@@ -1,0 +1,32 @@
+name: Component verification
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        autocrlf: ['true', 'false']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Fresh checkout with selected line ending policy
+        shell: pwsh
+        run: |
+          git -c core.autocrlf=${{ matrix.autocrlf }} clone --no-hardlinks . ../fresh
+          git -C ../fresh rev-parse HEAD
+      - name: Run host tests
+        shell: pwsh
+        run: |
+          $compiler = (Get-Command clang.exe -ErrorAction Stop).Source
+          python ../fresh/tests/run.py --clang $compiler
+  cmake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake -S tests/cmake -B build/consumer
+      - run: cmake --build build/consumer
+      - run: ctest --test-dir build/consumer --output-on-failure
